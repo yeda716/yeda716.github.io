@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>광고 퍼포먼스: 심리적 장벽 & 도달 범위</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/tabler-icons.min.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f5f3f0;
+  color: #2c2c2a;
+  line-height: 1.6;
+}
+.container { max-width: 900px; margin: 0 auto; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.header { margin-bottom: 24px; }
+.header h1 { font-size: 24px; font-weight: 500; margin-bottom: 2px; }
+.header .sub { font-size: 13px; color: #888780; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; font-size: 12px; align-items: center; }
+.legend .btag { font-size: 11px; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 16px; }
+.colhead { font-size: 12px; padding: 6px 10px; border-radius: 6px; display: inline-block; margin-bottom: 10px; font-weight: 500; }
+.stage { font-size: 13px; color: #888780; margin: 0 0 10px; }
+.hurdle { border: 0.5px solid #d3d1c7; border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; background: #fafaf8; }
+.hrow { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.hurdle h3 { margin: 0 0 2px; font-size: 15px; font-weight: 500; }
+.btag { font-size: 11px; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+.hsub { font-size: 12px; color: #888780; margin: 0 0 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 12px; padding: 5px 10px; border-radius: 6px; border: 0.5px solid #d3d1c7; background: #f1ede8; cursor: pointer; transition: all .15s; }
+.chip:hover { background: #e8e4df; }
+.detail { margin-top: 9px; font-size: 12px; line-height: 1.55; border-top: 0.5px solid #d3d1c7; padding-top: 9px; display: none; color: #5f5e5a; }
+.detail.show { display: block; }
+.detail li { margin: 4px 0; }
+.arrow-row { text-align: center; color: #b4b2a9; font-size: 13px; margin: 12px 0 16px; }
+.concl { border: 1px solid #b5d4f4; border-radius: 8px; padding: 16px; background: #e6f1fb; }
+.concl h3 { margin: 0 0 8px; font-size: 16px; font-weight: 500; color: #0c447c; }
+.concl p { margin: 6px 0; font-size: 13px; line-height: 1.6; color: #0c447c; }
+.actlead { font-size: 13px; line-height: 1.6; color: #0c447c; margin: 12px 0 10px; padding-top: 12px; border-top: 0.5px solid #b5d4f4; }
+.acard { background: white; border: 0.5px solid #d3d1c7; border-radius: 6px; border-left: 3px solid #534AB7; margin-bottom: 8px; overflow: hidden; }
+.acard.bn { border-left-color: #888780; }
+.atop { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; cursor: pointer; background: #fafaf8; }
+.atop .at { font-size: 13px; font-weight: 500; color: #2c2c2a; }
+.atop i { font-size: 16px; color: #888780; transition: transform .2s; }
+.acard.open .atop { background: #f5f3f0; }
+.acard.open .atop i { transform: rotate(180deg); }
+.abody { display: none; padding: 0 12px 12px; font-size: 12px; line-height: 1.6; color: #5f5e5a; }
+.acard.open .abody { display: block; }
+.abody a { color: #185fa5; text-decoration: none; }
+.abody a:hover { text-decoration: underline; }
+@media (prefers-color-scheme: dark) {
+  body { background: #1a1a18; color: #e8e6dc; }
+  .container { background: #2c2c2a; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+  .colhead { background: rgba(255,255,255,0.1); }
+  .stage { color: #9c9a92; }
+  .hurdle { border-color: #444441; background: #333331; }
+  .hsub { color: #9c9a92; }
+  .chips { }
+  .chip { border-color: #444441; background: #3d3d3a; }
+  .chip:hover { background: #4a4a47; }
+  .detail { border-color: #444441; color: #c2c0b6; }
+  .concl { border-color: #0c447c; background: rgba(12, 68, 124, 0.15); }
+  .concl h3 { color: #b5d4f4; }
+  .concl p { color: #b5d4f4; }
+  .actlead { color: #b5d4f4; border-color: #0c447c; }
+  .acard { border-color: #444441; background: #333331; }
+  .atop { background: #3d3d3a; }
+  .atop .at { color: #e8e6dc; }
+  .atop i { color: #9c9a92; }
+  .acard.open .atop { background: #444441; }
+  .abody { color: #c2c0b6; }
+  .abody a { color: #85b7eb; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>광고 퍼포먼스: 심리적 장벽 & 도달 범위</h1>
+<p class="sub">경계가 모호해지며 '규모의 경제'로의 전환이 기대되는 퍼포먼스 액션</p>
+</div>
+
+<div class="legend">
+<span style="color: inherit;">흐려지는 경계:</span>
+<span class="btag" style="background:#FAECE7;color:#993C1D">오가닉+바이럴</span>
+<span class="btag" style="background:#FBEAF0;color:#993556">신뢰 레이어</span>
+<span class="btag" style="background:#EAF3DE;color:#3B6D11">즉시 구매 동인</span>
+<span class="btag" style="background:#E6F1FB;color:#0C447C">브랜딩</span>
+</div>
+
+<div class="cols">
+<div>
+<span class="colhead" style="background:#FAECE7;color:#993C1D">① 이탈을 막는 심리적 장벽</span>
+<p class="stage">소비자가 걸려서 떠나는 필터 — 통과시켜야 함</p>
+
+<div class="hurdle" style="border-left:3px solid #D85A30">
+<div class="hrow"><h3>의도 허들 <span style="font-size:11px;color:#888780">— 중요</span></h3><span class="btag" style="background:#FAECE7;color:#993C1D">오가닉+바이럴</span></div>
+<p class="hsub">"왜 알려주지?" → 이익이 티나면 이탈</p>
+<div class="chips">
+<span class="chip" data-d="d1a">찐팬 자아</span>
+<span class="chip" data-d="d1b">이해관계 없는 채널</span>
+<span class="chip" data-d="d1c">덕후 채널</span>
+</div>
+<div class="detail" id="d1a"><ul><li>"10병째 쓴", "5년 동안 쓴" 같은 오래 쓴 진짜 사용자 자아</li><li>추천이 아니라 경험 공유로 읽혀 의도 필터를 통과</li></ul></div>
+<div class="detail" id="d1b"><ul><li>특정 제품과 무관하게 조회수·파트너스 수익을 얻는 채널 (예: 렉카)</li><li>수익형이라 신뢰도에서 걸릴 수 있어 찐팬·다큐 레이어링 필수</li></ul></div>
+<div class="detail" id="d1c"><ul><li>관심사가 명확한 덕후 채널 (예: 뷰티덕후)</li><li>"좋아서 파는 사람" 인상이 상업적 의도를 가림</li></ul></div>
+</div>
+
+<div class="hurdle" style="border-left:3px solid #BA7517">
+<div class="hrow"><h3>신뢰도 허들</h3><span class="btag" style="background:#FBEAF0;color:#993556">신뢰 레이어</span></div>
+<p class="hsub">"참이야?" → 의심되면 이탈</p>
+<div class="chips">
+<span class="chip" data-d="d2a">고생극복 화자</span>
+<span class="chip" data-d="d2b">전문가</span>
+<span class="chip" data-d="d2c">다수 검증</span>
+<span class="chip" data-d="d2d">정보 채널</span>
+</div>
+<div class="detail" id="d2a"><ul><li>동일 고민을 '해소해봤을 것 같은' 페르소나</li><li>예: 30대 남성의 이너케어젤 추천은 안 됨 / 131앰플 쓴 원희의 피부</li></ul></div>
+<div class="detail" id="d2b"><ul><li>전문가 화자 — 지식·자격으로 정보의 참을 보증</li></ul></div>
+<div class="detail" id="d2c"><ul><li>트렌드·거대한 흐름이라는 다수 검증</li><li>"다들 쓴다"는 반증으로 셀럽을 동원하기도 함</li></ul></div>
+<div class="detail" id="d2d"><ul><li>정보 기반으로 팔로워를 얻는 채널 (예: 다큐)</li><li>채널 신뢰가 메시지 신뢰로 전이</li></ul></div>
+</div>
+
+<div class="hurdle" style="border-left:3px solid #639922">
+<div class="hrow"><h3>경제적 허들</h3><span class="btag" style="background:#EAF3DE;color:#3B6D11">즉시 구매 동인</span></div>
+<p class="hsub">"나에게 큰 이득?" → 없으면 이탈</p>
+<div class="chips">
+<span class="chip" data-d="d3a">컨셉 마케팅</span>
+<span class="chip" data-d="d3b">프로모션</span>
+</div>
+<div class="detail" id="d3a"><ul><li>지금 사면 남들보다 이득이라는 컨셉</li><li>예: 이전엔 30% 함량 → 오늘부터 사면 3000% 함량</li></ul></div>
+<div class="detail" id="d3b"><ul><li>지금 사야 할 금전적 이유 (예: 오늘만 파격 할인)</li></ul></div>
+</div>
+</div>
+
+<div>
+<span class="colhead" style="background:#E6F1FB;color:#0C447C">② 장벽 통과 후 — 도달 범위</span>
+<p class="stage">이탈 방지가 아니라, 얼마나 넓고 유의미하게 퍼뜨리느냐</p>
+
+<div class="hurdle" style="border-left:3px solid #378ADD">
+<div class="hrow"><h3>도달 범위 <span style="font-size:11px;color:#888780">— 중요</span></h3><span class="btag" style="background:#E6F1FB;color:#0C447C">브랜딩</span></div>
+<p class="hsub">넓어지되 + 유의미해야 한다</p>
+<div class="chips">
+<span class="chip" data-d="d4a">수평적 확장</span>
+<span class="chip" data-d="d4b">수직적 확장</span>
+<span class="chip" data-d="d4c">이원화 구조</span>
+</div>
+<div class="detail" id="d4a"><ul><li>화자의 파급력으로 도달 범위를 넓힘</li><li>예: 10만 약사채널보다 100만 강민경채널이 더 넓게 도달</li></ul></div>
+<div class="detail" id="d4b"><ul><li>화자의 관심사로 유의미한 도달로 좁힘</li><li>예: 임영웅보다 송가인의 이너케어젤이 유의미</li></ul></div>
+<div class="detail" id="d4c"><ul><li>파급력+관심사를 한 명이 다 커버하거나, 관심사만 커버하는 화자의 양을 늘림</li><li>예: 한가인 이너케어젤 + 스테마 100건</li></ul></div>
+</div>
+</div>
+</div>
+
+<div class="arrow-row">↓ 두 단계가 함께 작동하면</div>
+
+<div class="concl">
+<h3>결론 — 경계가 모호해지며 '규모의 경제'로의 전환이 기대되는 퍼포먼스 액션을 그릴 수 있다</h3>
+<p>의도·신뢰·경제 장벽 보완은 오가닉+바이럴의 효과성을, 도달 범위 보완은 브랜딩의 효과성을 끌어온다.</p>
+<p>보완할수록 퍼포먼스 · 브랜딩 · 바이럴의 경계가 흐려진다.</p>
+
+<p class="actlead">세 심리적 장벽을 낮추고 + 도달 범위를 유의미하게 넓히는 액션을 국내 단위로 확대하면, 규모의 경제로의 전환이 기대된다. <span style="opacity:.7">↓ 클릭해 세부 예시 보기</span></p>
+
+<div class="acard">
+<div class="atop"><span class="at">1. 셀럽 찐추천 연출 + 렉카 계정 프로필 = 렉카 PA</span><i class="ti ti-chevron-down"></i></div>
+<div class="abody">셀럽의 진짜 추천 연출을 이해관계가 먼 렉카 계정의 프로필로 노출해 의도 허들을 우회한다. 셀럽의 파급력은 가져오되, 화자가 제품과 무관해 보여 "왜 알려주지?" 필터를 통과.</div>
+</div>
+
+<div class="acard">
+<div class="atop"><span class="at">2. 뷰티 인플루언서 가계정 컨셉 활용</span><i class="ti ti-chevron-down"></i></div>
+<div class="abody">관심사가 명확한 덕후/인플루언서 가계정 컨셉으로 상업적 의도를 가린다.<br><a href="https://www.instagram.com/reels/DUNLmWrgH9Q/" target="_blank">예시 1</a> · <a href="https://www.instagram.com/reels/DZZrJgJOa3A/" target="_blank">예시 2</a></div>
+</div>
+
+<div class="acard">
+<div class="atop"><span class="at">3. 이해관계가 가장 먼 "소비자의 추천"이 파급력을 갖도록 판 깔기</span><i class="ti ti-chevron-down"></i></div>
+<div class="abody">예: "인플루언서: 꿀템 소개해주세요 / 소비자: 131앰플요!" 소재를 PA 돌리기<br>예: 셀럽 말은 광고 같아 안 믿긴다면, '셀럽의 팬이 찐추천해서 셀럽이 쓰게 된 템'처럼 역방향 바이럴 스토리텔링 만들기</div>
+</div>
+
+<div class="acard bn">
+<div class="atop"><span class="at">+) 병목 제거 액션</span><i class="ti ti-chevron-down"></i></div>
+<div class="abody">위 방법론으로 캐시를 가져오는 데 생기는 병목을 제거하는 액션.<br>예: 교육형 콘텐츠 발행</div>
+</div>
+</div>
+
+</div>
+
+<script>
+document.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    const det = document.getElementById(c.getAttribute('data-d'));
+    const open = det.classList.contains('show');
+    const hurdle = c.closest('.hurdle');
+    hurdle.querySelectorAll('.detail').forEach(d => d.classList.remove('show'));
+    hurdle.querySelectorAll('.chip').forEach(x => x.style.background = '');
+    if (!open) {
+      det.classList.add('show');
+      c.style.background = '#e8e4df';
+    }
+  });
+});
+
+document.querySelectorAll('.atop').forEach(t => {
+  t.addEventListener('click', () => t.closest('.acard').classList.toggle('open'));
+});
+</script>
+</body>
+</html>
