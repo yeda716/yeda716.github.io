@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>앤소프 매트릭스: 어디서 무엇을 팔 것인가</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/tabler-icons.min.css">
+<style>
+:root {
+  --bg-page: #f5f3f0;
+  --bg-primary: #ffffff;
+  --bg-secondary: #fafaf8;
+  --text-primary: #2c2c2a;
+  --text-secondary: #5f5e5a;
+  --text-tertiary: #888780;
+  --border-tertiary: #d3d1c7;
+  --border-secondary: #b4b2a9;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page: #1a1a18;
+    --bg-primary: #2c2c2a;
+    --bg-secondary: #333331;
+    --text-primary: #e8e6dc;
+    --text-secondary: #c2c0b6;
+    --text-tertiary: #9c9a92;
+    --border-tertiary: #444441;
+    --border-secondary: #5f5e5a;
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.6;
+  padding: 20px;
+}
+.container { max-width: 900px; margin: 0 auto; padding: 24px; background: var(--bg-primary); border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.header { margin-bottom: 18px; }
+.header h1 { font-size: 22px; font-weight: 500; margin-bottom: 2px; }
+.intro { font-size: 13px; color: var(--text-secondary); margin: 0 0 14px; line-height: 1.6; }
+.bannerwrap { display: flex; flex-direction: column; gap: 8px; margin: 0 0 14px; }
+.bnr { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; font-size: 12px; line-height: 1.55; }
+.bnr .lbl { font-weight: 500; font-size: 11px; padding: 3px 8px; color: white; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
+.bnr.d2c { background: #EEEDFE; color: #3C3489; }
+.bnr.d2c .lbl { background: #534AB7; }
+.bnr.start { background: #EAF3DE; color: #27500A; }
+.bnr.start .lbl { background: #3B6D11; }
+@media (prefers-color-scheme: dark) {
+  .bnr.d2c { background: rgba(83, 74, 183, 0.15); color: #AFA9EC; }
+  .bnr.start { background: rgba(59, 109, 17, 0.15); color: #C0DD97; }
+}
+.riskbar { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); margin: 14px 0; padding: 10px 12px; background: var(--bg-secondary); border-radius: 8px; }
+.riskbar .dot { width: 8px; height: 8px; border-radius: 50%; }
+.axislabel { font-size: 12px; color: var(--text-secondary); text-align: center; margin: 0 0 6px; }
+.matrixwrap { display: grid; grid-template-columns: 24px 1fr; gap: 4px; margin-bottom: 14px; }
+.yaxis { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 12px; color: var(--text-secondary); text-align: center; align-self: center; }
+.matrix { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 8px; }
+.cellhead { grid-column: 1/3; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px; color: var(--text-secondary); text-align: center; }
+.cell { border: 0.5px solid var(--border-tertiary); border-radius: 12px; padding: 14px 16px; cursor: pointer; background: var(--bg-secondary); transition: background .15s; position: relative; }
+.cell:hover { background: var(--bg-primary); }
+.cell.open { background: var(--bg-primary); border-color: var(--border-secondary); }
+.cell .tag { font-size: 11px; padding: 2px 7px; border-radius: 6px; display: inline-block; margin-bottom: 6px; margin-right: 4px; }
+.cell h3 { margin: 0 0 4px; font-size: 15px; font-weight: 500; }
+.cell .desc { font-size: 12px; color: var(--text-secondary); margin: 0 0 6px; line-height: 1.5; }
+.cell .arrow { position: absolute; top: 14px; right: 14px; font-size: 14px; color: var(--text-tertiary); transition: transform .2s; }
+.cell.open .arrow { transform: rotate(180deg); }
+.cellbody { display: none; margin-top: 10px; padding-top: 10px; border-top: 0.5px solid var(--border-tertiary); }
+.cell.open .cellbody { display: block; }
+.kv { display: grid; grid-template-columns: 60px 1fr; gap: 6px 10px; font-size: 12px; line-height: 1.55; }
+.kv .k { color: var(--text-tertiary); }
+.kv .v { color: var(--text-primary); }
+.kv .v .crow { margin: 2px 0; }
+.ckey { color: #534AB7; font-weight: 500; margin-right: 4px; font-size: 11px; }
+@media (prefers-color-scheme: dark) { .ckey { color: #AFA9EC; } }
+.exlist { margin: 2px 0 0; padding-left: 14px; color: var(--text-secondary); }
+.exlist li { margin: 3px 0; line-height: 1.5; }
+.dirtag { font-size: 11px; padding: 2px 7px; border-radius: 6px; margin-right: 4px; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; color: var(--text-secondary); margin: 14px 0 0; padding-top: 14px; border-top: 0.5px solid var(--border-tertiary); }
+.legend .item { display: flex; align-items: center; gap: 6px; }
+.legend .swatch { width: 10px; height: 10px; border-radius: 2px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+<h1>앤소프 매트릭스: 어디서 무엇을 팔 것인가</h1>
+</div>
+
+<p class="intro">시장 × 제품 위치를 먼저 잡고(앤소프), 그 위에 채널 전략을 얹는 2단 프레임. 셀을 클릭하면 정의·확산·채널·예시가 펼쳐진다.</p>
+
+<div class="bannerwrap">
+<div class="bnr d2c">
+<span class="lbl">공통 전제</span>
+<span>모든 사분면에서 D2C 락인 전략을 기본으로 깐다. 셀별 차이는 락인의 방향성과 그 위에 얹는 추가 채널에 있다.</span>
+</div>
+<div class="bnr start">
+<span class="lbl">출발점 합의</span>
+<span>운영 중인 모든 제품(삽입형 포함)은 시장 침투에서 출발한다고 가정. 거기서 어디로 매출을 확장할 것인지를 논의한다.</span>
+</div>
+</div>
+
+<div class="riskbar">
+<span class="dot" style="background:#97C459"></span><span>위험 낮음</span>
+<span style="flex:1;height:2px;background:linear-gradient(to right,#97C459,#EF9F27,#E24B4A);border-radius:1px"></span>
+<span class="dot" style="background:#E24B4A"></span><span>위험 높음</span>
+</div>
+
+<div class="matrixwrap">
+<div class="yaxis">제품</div>
+<div class="matrix">
+<div class="cellhead"><span>기존 시장</span><span>신 시장</span></div>
+
+<div class="cell" style="border-left:3px solid #97C459">
+<span class="tag" style="background:#EAF3DE;color:#3B6D11">위험 ↓</span>
+<span class="tag" style="background:#3B6D11;color:white">출발점</span>
+<i class="ti ti-chevron-down arrow"></i>
+<h3>시장 침투</h3>
+<p class="desc">검증된 시장에 같은 제품을 더 많이 — 제품의 배타적 차별성이 무기</p>
+<div class="cellbody">
+<div class="kv">
+<span class="k">정의</span><span class="v">이미 검증된 시장에서 제품의 배타적 차별성을 보여주는 전략. 이삼오구식 마케팅과 가장 맞닿아 있고, 위험이 가장 낮음</span>
+<span class="k">확산</span><span class="v"><span class="dirtag" style="background:#FAEEDA;color:#854F0B">수직</span>한 영역에서 깊이 파기</span>
+<span class="k">채널</span><span class="v">
+<div class="crow"><span class="ckey">D2C 락인</span>재구매·구독 모델로 LTV 극대화</div>
+<div class="crow"><span class="ckey">추가</span>올리브영 등에서 진열·점유율 확대 → 자사몰로 신규 유입 송환</div>
+</span>
+<span class="k">언제</span><span class="v">캐시카우 안정화가 우선일 때, 신규 진입 전 체력 다질 때</span>
+<span class="k">예시</span><span class="v"><ul class="exlist"><li>기존 이너케어젤 구매자에게 재구매 주기 단축 캠페인</li><li>올리브영 내 같은 카테고리에서 경쟁 SKU 대비 진열·노출 확대</li><li>자사몰 구독 전환으로 LTV 끌어올리기</li></ul></span>
+</div>
+</div>
+</div>
+
+<div class="cell" style="border-left:3px solid #EF9F27">
+<span class="tag" style="background:#FAEEDA;color:#854F0B">위험 중</span>
+<i class="ti ti-chevron-down arrow"></i>
+<h3>시장 개발</h3>
+<p class="desc">검증된 제품을 새로운 고객 세그먼트(연령·성별·페인포인트)에</p>
+<div class="cellbody">
+<div class="kv">
+<span class="k">정의</span><span class="v">시장 침투 이후 수명을 다한 고객 세그먼트 대신, 새로운 세그먼트를 공략. 제품은 그대로, 시장만 이동</span>
+<span class="k">확산</span><span class="v"><span class="dirtag" style="background:#FAEEDA;color:#854F0B">수직</span><span class="dirtag" style="background:#E6F1FB;color:#0C447C">수평</span>버티컬 침투 후 확장</span>
+<span class="k">채널</span><span class="v">
+<div class="crow"><span class="ckey">D2C 락인</span>신규 세그먼트를 자사몰 회원으로 전환·락인</div>
+<div class="crow"><span class="ckey">추가</span>신 세그먼트가 모이는 카테고리 버티컬 침투 → 자사몰로 송환</div>
+</span>
+<span class="k">언제</span><span class="v">기존 세그먼트가 포화·고령화되어 새 페인포인트나 연령대로 넘어갈 때</span>
+<span class="k">예시</span><span class="v"><ul class="exlist"><li>검증된 유산균을 4050 중장년층 → 30대 아기엄마에게 (인구통계 이동)</li><li>같은 앰플을 '피부 진정'에서 '환절기 트러블 관리'로 페인포인트 재정의</li><li>국내 30대 여성용 제품을 50대 남성 갱년기 시장으로 재포지셔닝</li></ul></span>
+</div>
+</div>
+</div>
+
+<div class="cell" style="border-left:3px solid #EF9F27">
+<span class="tag" style="background:#FAEEDA;color:#854F0B">위험 중</span>
+<i class="ti ti-chevron-down arrow"></i>
+<h3>제품 개발</h3>
+<p class="desc">기존 시장의 이해도 + 고객 충성도 위에 신제품</p>
+<div class="cellbody">
+<div class="kv">
+<span class="k">정의</span><span class="v">시장이 동일하므로 시장 이해도 기반으로 신제품 출시 가능하고, 기존 고객의 충성도가 자연스럽게 따라옴</span>
+<span class="k">확산</span><span class="v"><span class="dirtag" style="background:#E6F1FB;color:#0C447C">수평</span>같은 고객에 라인업 늘리기</span>
+<span class="k">채널</span><span class="v">
+<div class="crow"><span class="ckey">D2C 락인</span>기존 회원에게 라인업 크로스셀로 락인 심화</div>
+<div class="crow"><span class="ckey">추가</span>쿠팡·선물하기 등 채널별 라인업 이원화로 노출 확대</div>
+</span>
+<span class="k">언제</span><span class="v">기존 고객 LTV 확장, 카테고리 내 점유율을 라인으로 묶을 때</span>
+<span class="k">예시</span><span class="v"><ul class="exlist"><li>이너케어젤 구매자에게 같은 시리즈의 클렌저·세럼 추가 출시</li><li>단품 → 세트·기프트박스 라인업으로 선물하기 채널 진입</li><li>스킨케어 라인업 → 같은 컨셉의 이너뷰티 라인 출시</li></ul></span>
+</div>
+</div>
+</div>
+
+<div class="cell" style="border-left:3px solid #E24B4A">
+<span class="tag" style="background:#FCEBEB;color:#A32D2D">위험 ↑</span>
+<i class="ti ti-chevron-down arrow"></i>
+<h3>다각화</h3>
+<p class="desc">신 시장 × 신제품 — 레버리지를 활용한 새 영역 확장</p>
+<div class="cellbody">
+<div class="kv">
+<span class="k">정의</span><span class="v">위험이 가장 큰 만큼, 성공 시 브랜드 확장과 신규 시장 확보를 동시에. 무에서 유가 아니라 기존 자산(브랜드·기술·고객)을 일정 부분 레버리지로 활용</span>
+<span class="k">확산</span><span class="v"><span class="dirtag" style="background:#FAEEDA;color:#854F0B">수직</span><span class="dirtag" style="background:#E6F1FB;color:#0C447C">수평</span>둘 다 — 검증 단계가 늘어남</span>
+<span class="k">채널</span><span class="v">
+<div class="crow"><span class="ckey">D2C 락인</span>새 카테고리 검증 후 자사몰로 통합해 락인</div>
+<div class="crow"><span class="ckey">추가</span>버티컬 진입(검증) → 자사몰+멀티채널(확장) 단계별 운영</div>
+</span>
+<span class="k">언제</span><span class="v">기존 전장이 포화이고, 기존 자산을 레버리지로 새 캐시카우를 만들 수 있을 때</span>
+<span class="k">예시</span><span class="v"><ul class="exlist"><li>레고: 블록 → 영화·테마파크 등 엔터테인먼트로 브랜드 자산 레버리지 확장</li><li>여성 스킨케어 브랜드 → 남성 그루밍 신제품 진입</li><li>이너뷰티 → 펫 헬스 영역으로 확장</li></ul></span>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<p class="axislabel">시장 →</p>
+
+<div class="legend">
+<div class="item"><span class="swatch" style="background:#FAEEDA"></span>수직 확산: 한 시장·채널에서 깊이 (침투·락인)</div>
+<div class="item"><span class="swatch" style="background:#E6F1FB"></span>수평 확산: 여러 시장·제품·채널로 넓게 (확장)</div>
+</div>
+
+</div>
+
+<script>
+document.querySelectorAll('.cell').forEach(c => {
+  c.addEventListener('click', () => c.classList.toggle('open'));
+});
+</script>
+</body>
+</html>
